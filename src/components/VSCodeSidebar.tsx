@@ -217,7 +217,7 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
               <div className="flex items-center">
                 {activeView === "explorer" ? (
                   <>
-                    <span className="mr-2">HACKATHON-2024</span>
+                    <span className="mr-2">SEMICOLON-2025</span>
                     <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                       <path fillRule="evenodd" clipRule="evenodd" d="M14 4.52v-.41l-2.02-.63L10.54 2 9.71 3.5l-2.02.63.31 1.65-.58.53-1.5-.39L4.6 7.15l.9 1.31-.21.98L4 10.08l.56 1.56 1.34-.26.67.85-.24 1.33 1.68.24 1.2-.95.92.47 1.05-1.29.49.12.73 1.36.89-1.3 1.13-.18.3-1.41-.61-.74 1.05-1.01-.43-1.25-.96-.25.02-.76 1.48-.36L14 4.52zM9.64 8.35l-.84.79-.84-.79.84-.79.84.79z" />
                     </svg>
