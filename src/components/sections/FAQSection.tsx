@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   Accordion,
@@ -9,7 +8,7 @@ import {
 
 interface FAQItemProps {
   question: string;
-  answer: string;
+  answer: string | React.ReactNode;
 }
 
 const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
@@ -31,7 +30,7 @@ const FAQSection: React.FC = () => {
     },
     {
       question: "When and where will the hackathon take place?",
-      answer: "SemiColon 2025 will be held from April 20-22, 2025. The event will take place at the Tech Innovation Center, 123 Developer Avenue, Silicon Valley. We also offer limited virtual participation options for international participants."
+      answer: "SemiColon 2025 will be held from April 20-22, 2025. The event will take place at Adamas University Entrance, Barasat. We also offer limited virtual participation options for international participants."
     },
     {
       question: "Who can participate?",
@@ -94,6 +93,31 @@ const FAQSection: React.FC = () => {
       question: "What about COVID-19 safety measures?",
       answer: "We follow all local health guidelines. Participants may be required to show proof of vaccination or negative test results. Masks may be required in certain areas. We'll provide detailed safety protocols closer to the event date."
     },
+    {
+      question: "How do I get to the venue location?",
+      answer: (
+        <div>
+          <p className="mb-4">The hackathon will be held at Adamas University, Barasat. Here's a map to help you locate it:</p>
+          <div className="w-full h-80 bg-gray-100 rounded-lg overflow-hidden shadow-md border border-gray-200">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3681.056903789506!2d88.45492091498957!3d22.74053779999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f8993dc2b13307%3A0x70093a25bdcfdd54!2sAdamas%20University%20Entrance!5e0!3m2!1sen!2sin!4v1713111955358!5m2!1sen!2sin" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={true} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Adamas University Entrance Map"
+              className="hover:opacity-95 transition-opacity"
+            />
+          </div>
+          <p className="mt-4">Public transportation is available</p>
+          <p className="mt-4">Arrive at Barrackpur Station and from there direct bus or auto.</p>
+          <p className="mt-4">Arrive at Barasat Station and from there direct toto.</p>
+          <p className="mt-4">If you're rich enough, book a cab </p>
+        </div>
+      )
+    }
   ];
 
   return (
