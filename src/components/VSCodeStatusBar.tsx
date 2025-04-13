@@ -1,13 +1,11 @@
-
 import React from "react";
-
 interface VSCodeStatusBarProps {
   children?: React.ReactNode;
 }
 
 const VSCodeStatusBar: React.FC<VSCodeStatusBarProps> = ({ children }) => {
   return (
-    <div className="h-6 flex items-center px-2 text-xs bg-vscode-statusbar dark:bg-vscode-statusbar border-t border-border dark:border-[#333] relative z-20">
+    <div className="h-6 flex items-center px-2 text-xs bg-vscode-statusbar border-t border-border text-primary-foreground relative z-20">
       <div className="flex items-center space-x-2">
         <div className="flex items-center">
           <span className="mr-2">main</span>

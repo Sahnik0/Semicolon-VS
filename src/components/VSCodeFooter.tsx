@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Bell, Circle, Terminal, CircleX, AlertTriangle, Share2, Wifi, Code, Zap, GitBranch } from 'lucide-react';
 
@@ -8,7 +7,7 @@ interface VSCodeFooterProps {
 
 const VSCodeFooter: React.FC<VSCodeFooterProps> = ({ onToggleTerminal }) => {
   return (
-    <div className="h-7 bg-vscode-statusbar dark:bg-vscode-statusbar border-t border-border dark:border-[#333] flex items-center text-xs">
+    <div className="h-7 bg-vscode-statusbar border-t border-border flex items-center text-xs text-primary-foreground">
       <div className="flex items-center px-2 space-x-4">
         <button className="flex items-center hover:bg-black/10 px-1 py-0.5 rounded" aria-label="main">
           <GitBranch className="h-3.5 w-3.5 mr-1" />

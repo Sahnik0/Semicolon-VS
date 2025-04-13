@@ -33,9 +33,9 @@ const ActivityBarItem: React.FC<ActivityBarItemProps> = ({ icon, label, active, 
       <Tooltip>
         <TooltipTrigger asChild>
           <button
-            className={`w-12 h-12 flex items-center justify-center transition-colors ${
+            className={`w-12 h-12 flex items-center justify-center transition-colors activity-item ${
               active 
-                ? "text-white border-l-2 border-primary" 
+                ? "text-foreground border-l-2 border-primary" 
                 : "text-muted-foreground hover:text-foreground"
             }`}
             onClick={onClick}
@@ -77,14 +77,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   return (
     <div className="relative group">
       <div
-        className={`px-4 py-2 text-sm cursor-pointer flex items-center gap-2 ${
+        className={`px-4 py-2 text-sm cursor-pointer flex items-center gap-2 sidebar-item ${
           active 
-            ? "bg-accent text-foreground" 
-            : "hover:bg-accent/50 text-muted-foreground hover:text-foreground"
+            ? "bg-accent text-accent-foreground" 
+            : "hover:bg-accent/50 text-foreground hover:text-foreground"
         }`}
       >
         {isFolder && (
-          <span onClick={onToggle} className="cursor-pointer">
+          <span onClick={onToggle} className="cursor-pointer text-foreground">
             {isOpen ? <ChevronDown size={16} /> : <ChevronRightIcon size={16} />}
           </span>
         )}
@@ -193,7 +193,7 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
 
   return (
     <div className="flex h-full">
-      <div className="w-12 flex flex-col bg-vscode-activitybar-dark dark:bg-vscode-activitybar-dark">
+      <div className="w-12 flex flex-col bg-vscode-activitybar-dark">
         {activityBarItems.map((item) => (
           <ActivityBarItem
             key={item.id}
@@ -207,33 +207,33 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
 
       <div 
         className={cn(
-          "bg-[#f3f3f3] dark:bg-vscode-dark-sidebar border-r border-border overflow-y-auto transition-all duration-300 ease-in-out",
+          "bg-background dark:bg-vscode-dark-sidebar border-r border-border overflow-y-auto transition-all duration-300 ease-in-out",
           sidebarExpanded ? "w-48 lg:w-60" : "w-0"
         )}
       >
         {sidebarExpanded && (
           <div className="py-2">
-            <div className="text-xs uppercase px-4 py-1 text-muted-foreground flex items-center justify-between">
-              <div className="flex items-center">
-                {activeView === "explorer" ? (
-                  <>
-                    <span className="mr-2">SEMICOLON-2025</span>
-                    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M14 4.52v-.41l-2.02-.63L10.54 2 9.71 3.5l-2.02.63.31 1.65-.58.53-1.5-.39L4.6 7.15l.9 1.31-.21.98L4 10.08l.56 1.56 1.34-.26.67.85-.24 1.33 1.68.24 1.2-.95.92.47 1.05-1.29.49.12.73 1.36.89-1.3 1.13-.18.3-1.41-.61-.74 1.05-1.01-.43-1.25-.96-.25.02-.76 1.48-.36L14 4.52zM9.64 8.35l-.84.79-.84-.79.84-.79.84.79z" />
-                    </svg>
-                  </>
-                ) : (
-                  activeView.toUpperCase()
-                )}
-              </div>
-              <button 
-                onClick={toggleSidebar} 
-                className="hover:bg-accent rounded p-1"
-                aria-label="Toggle sidebar"
-              >
-                <ChevronLeft size={16} />
-              </button>
-            </div>
+<div className="text-xs uppercase px-4 py-1 text-muted-foreground flex items-center justify-between">
+  <div className="flex items-center">
+    {activeView === "explorer" ? (
+      <>
+        <span className="mr-2">SEMICOLON-2025</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+          <path fillRule="evenodd" clipRule="evenodd" d="M14 4.52v-.41l-2.02-.63L10.54 2 9.71 3.5l-2.02.63.31 1.65-.58.53-1.5-.39L4.6 7.15l.9 1.31-.21.98L4 10.08l.56 1.56 1.34-.26.67.85-.24 1.33 1.68.24 1.2-.95.92.47 1.05-1.29.49.12.73 1.36.89-1.3 1.13-.18.3-1.41-.61-.74 1.05-1.01-.43-1.25-.96-.25.02-.76 1.48-.36L14 4.52zM9.64 8.35l-.84.79-.84-.79.84-.79.84.79z" />
+        </svg>
+      </>
+    ) : (
+      activeView.toUpperCase()
+    )}
+  </div>
+  <button 
+    onClick={toggleSidebar} 
+    className="hover:bg-accent/50 hover:text-foreground rounded p-1 text-muted-foreground transition-colors"
+    aria-label="Toggle sidebar"
+  >
+    <ChevronLeft size={16} />
+  </button>
+</div>
             
             {/* Only show non-explorer views directly in sidebar */}
             {activeView !== "explorer" && (
@@ -317,15 +317,15 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
         )}
       </div>
       
-      {!sidebarExpanded && (
-        <button 
-          onClick={toggleSidebar}
-          className="h-8 w-5 flex items-center justify-center bg-[#f3f3f3] dark:bg-secondary/80 text-muted-foreground hover:text-foreground border-y border-r border-border rounded-r"
-          aria-label="Expand sidebar"
-        >
-          <ChevronRight size={16} />
-        </button>
-      )}
+     {!sidebarExpanded && (
+  <button 
+    onClick={toggleSidebar}
+    className="h-8 w-5 flex items-center justify-center bg-background border-y border-r border-border rounded-r text-muted-foreground hover:text-foreground transition-colors"
+    aria-label="Expand sidebar"
+  >
+    <ChevronRight size={16} />
+  </button>
+)}
     </div>
   );
 };

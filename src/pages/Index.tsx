@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import VSCodeLayout from "../components/VSCodeLayout";
 import AboutSection from "../components/sections/AboutSection";
 import TimelineSection from "../components/sections/TimelineSection";
@@ -9,9 +8,57 @@ import TeamSection from "../components/sections/TeamSection";
 import FAQSection from "../components/sections/FAQSection";
 import SponsorsSection from "../components/sections/SponsorsSection";
 import HomeSection from "../components/sections/HomeSection";
+import MarketplaceSection from "../components/sections/MarketplaceSection";
+import InstalledExtensionsSection from "../components/sections/InstalledExtensionsSection";
+import { ExtensionProvider, useExtensions } from "../contexts/ExtensionContext";
+import { ThemeProvider } from "../hooks/useTheme";
 
-const Index = () => {
+// Content wrapper component that applies theme colors from extensions
+const ContentWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { getActiveThemeColors } = useExtensions();
+  const themeColors = getActiveThemeColors();
+  
+  // Apply theme styles from active extensions to root element
+  useEffect(() => {
+    const root = document.documentElement;
+    
+    // Reset any previously set theme variables
+    const customProps = Array.from(root.style).filter(prop => prop.startsWith('--'));
+    customProps.forEach(prop => {
+      root.style.removeProperty(prop);
+    });
+    
+    // Apply new theme colors
+    Object.entries(themeColors).forEach(([key, value]) => {
+      root.style.setProperty(key, value);
+    });
+    
+    return () => {
+      // Cleanup function to reset custom properties when unmounting
+      customProps.forEach(prop => {
+        root.style.removeProperty(prop);
+      });
+    };
+  }, [themeColors]);
+  
+  return <>{children}</>;
+};
+
+const IndexContent: React.FC = () => {
   const [activeSection, setActiveSection] = useState("home");
+
+  // Listen for custom navigation events from other components
+  useEffect(() => {
+    const handleNavigate = (event: CustomEvent) => {
+      setActiveSection(event.detail);
+    };
+    
+    document.addEventListener('navigate-section', handleNavigate as EventListener);
+    
+    return () => {
+      document.removeEventListener('navigate-section', handleNavigate as EventListener);
+    };
+  }, []);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -31,12 +78,14 @@ const Index = () => {
         return <FAQSection />;
       case "sponsors":
         return <SponsorsSection />;
+      case "marketplace":
+        return <MarketplaceSection />;
+      case "installed":
+        return <InstalledExtensionsSection />;
       case "search-results":
       case "changes":
       case "commits":
       case "debug-console":
-      case "installed":
-      case "marketplace":
         // Adding dummy content for the additional sidebar options
         return (
           <div className="p-6 animate-fade-in">
@@ -65,8 +114,20 @@ const Index = () => {
       activeSection={activeSection}
       onSectionChange={setActiveSection}
     >
-      {renderContent()}
+      <ContentWrapper>
+        {renderContent()}
+      </ContentWrapper>
     </VSCodeLayout>
+  );
+};
+
+const Index: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <ExtensionProvider>
+        <IndexContent />
+      </ExtensionProvider>
+    </ThemeProvider>
   );
 };
 

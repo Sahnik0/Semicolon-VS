@@ -212,43 +212,43 @@ const VSCodeTerminal: React.FC<VSCodeTerminalProps> = ({ isOpen, setIsOpen }) =>
       {isOpen && (
         <div
           ref={terminalContainerRef}
-          className="absolute bottom-0 left-0 right-0 bg-vscode-terminal dark:bg-vscode-terminal border-t border-border z-30"
+          className="absolute bottom-0 left-0 right-0 bg-vscode-terminal border-t border-border z-30"
           style={{ height: `${height}px` }}
         >
           {/* Terminal header */}
           <div 
-            className="flex items-center justify-between p-1 bg-secondary dark:bg-vscode-dark-sidebar border-b border-border cursor-ns-resize"
+            className="flex items-center justify-between p-1 bg-secondary border-b border-border cursor-ns-resize"
             onMouseDown={handleMouseDown}
           >
-            <div className="text-xs px-2">TERMINAL</div>
+            <div className="text-xs px-2 text-foreground">TERMINAL</div>
             <div className="flex">
-              <button className="p-1 hover:bg-accent rounded-sm" onClick={() => setHeight(250)}>
+              <button className="p-1 hover:bg-accent rounded-sm text-foreground" onClick={() => setHeight(250)}>
                 <Minimize className="w-4 h-4" />
               </button>
-              <button className="p-1 hover:bg-accent rounded-sm" onClick={() => setHeight(400)}>
+              <button className="p-1 hover:bg-accent rounded-sm text-foreground" onClick={() => setHeight(400)}>
                 <Maximize className="w-4 h-4" />
               </button>
-              <button className="p-1 hover:bg-accent rounded-sm" onClick={() => setIsOpen(false)}>
+              <button className="p-1 hover:bg-accent rounded-sm text-foreground" onClick={() => setIsOpen(false)}>
                 <X className="w-4 h-4" />
               </button>
             </div>
           </div>
 
           {/* Terminal content */}
-          <div ref={terminalRef} className="h-[calc(100%-30px)] p-2 overflow-y-auto text-white font-mono text-sm">
+          <div ref={terminalRef} className="h-[calc(100%-30px)] p-2 overflow-y-auto text-foreground font-mono text-sm">
             {history.map((entry) => (
               <div key={entry.id} className="mb-1">
                 <div className="flex items-start">
                   <span className="text-green-500 mr-2">$</span>
-                  <span>{entry.command}</span>
+                  <span className="text-foreground">{entry.command}</span>
                 </div>
                 {entry.loading ? (
                   <div className="ml-4 flex items-center">
-                    <span className="text-cyan-400 mr-2">{spinnerFrames[loadingFrame]}</span>
-                    <span className="text-gray-400">Running...</span>
+                    <span className="text-primary mr-2">{spinnerFrames[loadingFrame]}</span>
+                    <span className="text-muted-foreground">Running...</span>
                   </div>
                 ) : entry.output && (
-                  <div className="ml-4 whitespace-pre-line text-gray-300">
+                  <div className="ml-4 whitespace-pre-line text-muted-foreground">
                     {entry.output}
                   </div>
                 )}
@@ -261,7 +261,7 @@ const VSCodeTerminal: React.FC<VSCodeTerminalProps> = ({ isOpen, setIsOpen }) =>
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="flex-1 bg-transparent outline-none terminal-text"
+                className="flex-1 bg-transparent outline-none text-foreground"
                 autoFocus
                 spellCheck="false"
                 autoComplete="off"

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { 
@@ -48,7 +47,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSectionChange }) => {
   return (
     <>
       <div 
-        className="flex items-center h-8 px-2 bg-accent/50 dark:bg-[#3c3c3c] rounded cursor-pointer max-w-[200px] lg:max-w-xs w-full mx-2"
+        className="flex items-center h-8 px-2 bg-accent/50 rounded cursor-pointer max-w-[200px] lg:max-w-xs w-full mx-2"
         onClick={() => setOpen(true)}
         role="button"
         tabIndex={0}

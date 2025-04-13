@@ -1,81 +1,113 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Light theme variables */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    /* Define custom properties that extensions can override */
+    --custom-background: 0 0% 100%; /* Light mode default */
+    --custom-foreground: 0 0% 0%;
+    --custom-card: 0 0% 100%;
+    --custom-card-foreground: 0 0% 0%;
+    --custom-popover: 0 0% 100%;
+    --custom-popover-foreground: 0 0% 0%;
+    --custom-primary: 210 100% 50%;
+    --custom-primary-foreground: 0 0% 98%;
+    --custom-secondary: 0 0% 93%;
+    --custom-secondary-foreground: 0 0% 20%;
+    --custom-muted: 0 0% 93%;
+    --custom-muted-foreground: 0 0% 50%;
+    --custom-accent: 0 0% 90%;
+    --custom-accent-foreground: 0 0% 20%;
+    --custom-destructive: 0 84.2% 60.2%;
+    --custom-destructive-foreground: 0 0% 98%;
+    --custom-border: 0 0% 85%;
+    --custom-input: 0 0% 85%;
+    --custom-ring: 210 100% 50%;
+    --custom-vscode-activitybar-dark: 0 0% 95%;
+    --custom-vscode-dark-sidebar: 0 0% 95%;
+    --custom-vscode-terminal: 0 0% 98%;
+    --custom-vscode-statusbar: 0 0% 93%;
+    --custom-radius: 0.25rem;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
-
-    --primary: 210 100% 50%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 0 0% 93%;
-    --secondary-foreground: 0 0% 20%;
-
-    --muted: 0 0% 93%;
-    --muted-foreground: 0 0% 50%;
-
-    --accent: 0 0% 90%;
-    --accent-foreground: 0 0% 20%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 85%;
-    --input: 0 0% 85%;
-    --ring: 210 100% 50%;
-
-    --radius: 0.25rem;
-
-    --vscode-activitybar-dark: 0 0% 95%;
-    --vscode-dark-sidebar: 0 0% 95%;
-    --vscode-terminal: 0 0% 98%;
-    --vscode-statusbar: 0 0% 93%;
+    /* Map Tailwind variables to custom properties */
+    --background: var(--custom-background);
+    --foreground: var(--custom-foreground);
+    --card: var(--custom-card);
+    --card-foreground: var(--custom-card-foreground);
+    --popover: var(--custom-popover);
+    --popover-foreground: var(--custom-popover-foreground);
+    --primary: var(--custom-primary);
+    --primary-foreground: var(--custom-primary-foreground);
+    --secondary: var(--custom-secondary);
+    --secondary-foreground: var(--custom-secondary-foreground);
+    --muted: var(--custom-muted);
+    --muted-foreground: var(--custom-muted-foreground);
+    --accent: var(--custom-accent);
+    --accent-foreground: var(--custom-accent-foreground);
+    --destructive: var(--custom-destructive);
+    --destructive-foreground: var(--custom-destructive-foreground);
+    --border: var(--custom-border);
+    --input: var(--custom-input);
+    --ring: var(--custom-ring);
+    --vscode-activitybar-dark: var(--custom-vscode-activitybar-dark);
+    --vscode-dark-sidebar: var(--custom-vscode-dark-sidebar);
+    --vscode-terminal: var(--custom-vscode-terminal);
+    --vscode-statusbar: var(--custom-vscode-statusbar);
   }
 
   .dark {
-    /* Dark theme variables */
-    --background: 0 0% 12%;
-    --foreground: 0 0% 80%;
+    /* Dark mode defaults */
+    --custom-background: 0 0% 12%;
+    --custom-foreground: 0 0% 80%;
+    --custom-card: 0 0% 12%;
+    --custom-card-foreground: 0 0% 80%;
+    --custom-popover: 0 0% 12%;
+    --custom-popover-foreground: 0 0% 80%;
+    --custom-primary: 210 100% 40%;
+    --custom-primary-foreground: 0 0% 98%;
+    --custom-secondary: 0 0% 15%;
+    --custom-secondary-foreground: 0 0% 80%;
+    --custom-muted: 0 0% 20%;
+    --custom-muted-foreground: 0 0% 60%;
+    --custom-accent: 0 0% 20%;
+    --custom-accent-foreground: 0 0% 80%;
+    --custom-destructive: 0 62.8% 30.6%;
+    --custom-destructive-foreground: 0 0% 98%;
+    --custom-border: 0 0% 20%;
+    --custom-input: 0 0% 20%;
+    --custom-ring: 210 100% 40%;
+    --custom-vscode-activitybar-dark: 0 0% 15%;
+    --custom-vscode-dark-sidebar: 0 0% 18%;
+    --custom-vscode-terminal: 0 0% 12%;
+    --custom-vscode-statusbar: 0 0% 15%;
+  }
 
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 80%;
-
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 80%;
-
-    --primary: 210 100% 40%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 80%;
-
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 60%;
-
-    --accent: 0 0% 20%;
-    --accent-foreground: 0 0% 80%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 210 100% 40%;
-    
-    --vscode-activitybar-dark: 0 0% 15%;
-    --vscode-dark-sidebar: 0 0% 18%;
-    --vscode-terminal: 0 0% 12%;
-    --vscode-statusbar: 0 0% 15%;
+  /* Ensure extension themes override defaults */
+  [data-using-extension-theme="true"] {
+    --background: var(--custom-background);
+    --foreground: var(--custom-foreground);
+    --card: var(--custom-card);
+    --card-foreground: var(--custom-card-foreground);
+    --popover: var(--custom-popover);
+    --popover-foreground: var(--custom-popover-foreground);
+    --primary: var(--custom-primary);
+    --primary-foreground: var(--custom-primary-foreground);
+    --secondary: var(--custom-secondary);
+    --secondary-foreground: var(--custom-secondary-foreground);
+    --muted: var(--custom-muted);
+    --muted-foreground: var(--custom-muted-foreground);
+    --accent: var(--custom-accent);
+    --accent-foreground: var(--custom-accent-foreground);
+    --destructive: var(--custom-destructive);
+    --destructive-foreground: var(--custom-destructive-foreground);
+    --border: var(--custom-border);
+    --input: var(--custom-input);
+    --ring: var(--custom-ring);
+    --vscode-activitybar-dark: var(--custom-vscode-activitybar-dark);
+    --vscode-dark-sidebar: var(--custom-vscode-dark-sidebar);
+    --vscode-terminal: var(--custom-vscode-terminal);
+    --vscode-statusbar: var(--custom-vscode-statusbar);
   }
 }
 
@@ -103,41 +135,41 @@
 
 @layer components {
   .vscode-tab {
-    @apply px-4 py-2 flex items-center gap-2 border-t-2 border-transparent hover:bg-[#e6e6e6] dark:hover:bg-[#2a2d2e] transition-colors;
+    @apply px-4 py-2 flex items-center gap-2 border-t-2 border-transparent hover:bg-secondary transition-colors;
   }
 
   .vscode-tab.active {
-    @apply border-t-2 border-[#0078d4] bg-white dark:bg-[#1e1e1e];
+    @apply border-t-2 border-primary bg-card;
   }
 
   .vscode-context-menu {
-    @apply absolute bg-white dark:bg-[#252526] border border-[#e0e0e0] dark:border-[#3c3c3c] rounded-md shadow-md py-1 z-50 min-w-[180px];
+    @apply absolute bg-card border border-border rounded-md shadow-md py-1 z-50 min-w-[180px];
   }
 
   .vscode-context-menu-item {
-    @apply px-3 py-1.5 text-sm flex items-center gap-2 hover:bg-[#0060c0] dark:hover:bg-[#04395e] hover:text-white cursor-pointer text-[#333] dark:text-[#cccccc];
+    @apply px-3 py-1.5 text-sm flex items-center gap-2 hover:bg-primary hover:text-primary-foreground cursor-pointer text-foreground;
   }
 
   .vscode-context-menu-separator {
-    @apply border-t border-[#e0e0e0] dark:border-[#3c3c3c] my-1;
+    @apply border-t border-border my-1;
   }
 
   .terminal-text {
-    @apply font-mono text-black dark:text-[#cccccc];
+    @apply font-mono text-foreground;
   }
 
   .cursor {
-    @apply inline-block w-2 h-4 bg-[#0078d4] animate-cursor-blink;
+    @apply inline-block w-2 h-4 bg-primary animate-cursor-blink;
   }
-  
+
   .gallery-image {
-    @apply rounded-md overflow-hidden border border-[#e0e0e0] dark:border-[#3c3c3c] hover:border-[#0078d4] transition-colors;
+    @apply rounded-md overflow-hidden border border-border hover:border-primary transition-colors;
   }
-  
+
   .gallery-overlay {
     @apply absolute inset-0 flex items-center justify-center bg-black/70 opacity-0 hover:opacity-100 transition-opacity;
   }
-  
+
   .gallery-title {
     @apply text-white text-sm font-medium;
   }
@@ -146,11 +178,11 @@
   .responsive-container {
     @apply container mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
+
   .responsive-grid {
     @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
   }
-  
+
   .responsive-flex {
     @apply flex flex-col sm:flex-row;
   }
@@ -160,12 +192,25 @@
   color-scheme: light dark;
 }
 
+/* VS Code UI component style overrides */
 .bg-vscode-activitybar-dark {
   background-color: hsl(var(--vscode-activitybar-dark));
+  color: hsl(var(--foreground));
+}
+
+.dark .bg-vscode-activitybar-dark,
+[data-using-extension-theme="true"].dark .bg-vscode-activitybar-dark {
+  color: hsl(var(--foreground));
 }
 
 .bg-vscode-dark-sidebar {
   background-color: hsl(var(--vscode-dark-sidebar));
+  color: hsl(var(--foreground));
+}
+
+.dark .bg-vscode-dark-sidebar,
+[data-using-extension-theme="true"].dark .bg-vscode-dark-sidebar {
+  color: hsl(var(--foreground));
 }
 
 .bg-vscode-terminal {
@@ -174,6 +219,33 @@
 
 .bg-vscode-statusbar {
   background-color: hsl(var(--vscode-statusbar));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Theme-specific overrides for tabs and menu items */
+[data-using-extension-theme="true"] .vscode-tab {
+  color: hsl(var(--foreground));
+}
+
+[data-using-extension-theme="true"] .vscode-tab.active {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-color: hsl(var(--primary));
+}
+
+[data-using-extension-theme="true"] .vscode-context-menu-item {
+  color: hsl(var(--foreground));
+}
+
+[data-using-extension-theme="true"] .sidebar-item {
+  color: hsl(var(--foreground));
+}
+
+/* Explicitly handle dark mode text colors for VS Code UI components */
+.dark .vscode-tab,
+.dark .sidebar-item,
+.dark .activity-item {
+  color: hsl(var(--foreground));
 }
 
 /* Mobile optimizations */
@@ -181,11 +253,11 @@
   .menubar-label {
     @apply hidden;
   }
-  
+
   .vscode-tab {
     @apply px-2 py-1 text-xs;
   }
-  
+
   .vscode-footer-item {
     @apply text-xs;
   }
