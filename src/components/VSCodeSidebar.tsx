@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   FileCode, 
@@ -11,7 +10,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Code,
-  File
+  File,
+  Folder,
+  FolderOpen,
+  X,
+  ChevronDown,
+  ChevronRight as ChevronRightIcon
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -52,20 +56,55 @@ interface SidebarItemProps {
   label: string;
   active: boolean;
   onClick: () => void;
+  onDelete?: () => void;
+  isFolder?: boolean;
+  isOpen?: boolean;
+  onToggle?: () => void;
+  showDeleteButton?: boolean;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, active, onClick }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ 
+  icon, 
+  label, 
+  active, 
+  onClick, 
+  onDelete, 
+  isFolder, 
+  isOpen, 
+  onToggle,
+  showDeleteButton = false
+}) => {
   return (
-    <div
-      className={`px-4 py-2 text-sm cursor-pointer flex items-center gap-2 ${
-        active 
-          ? "bg-accent text-foreground" 
-          : "hover:bg-accent/50 text-muted-foreground hover:text-foreground"
-      }`}
-      onClick={onClick}
-    >
-      {icon}
-      <span className="truncate">{label}</span>
+    <div className="relative group">
+      <div
+        className={`px-4 py-2 text-sm cursor-pointer flex items-center gap-2 ${
+          active 
+            ? "bg-accent text-foreground" 
+            : "hover:bg-accent/50 text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        {isFolder && (
+          <span onClick={onToggle} className="cursor-pointer">
+            {isOpen ? <ChevronDown size={16} /> : <ChevronRightIcon size={16} />}
+          </span>
+        )}
+        <span onClick={isFolder ? onToggle : onClick} className="flex items-center gap-2 flex-1">
+          {icon}
+          <span className="truncate">{label}</span>
+        </span>
+        {showDeleteButton && onDelete && (
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+            aria-label="Delete file"
+          >
+            <X size={14} />
+          </button>
+        )}
+      </div>
     </div>
   );
 };
@@ -79,16 +118,29 @@ interface VSCodeSidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
   userFiles?: UserFile[];
+  onDeleteFile?: (fileId: string) => void;
 }
 
 const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({ 
   activeSection, 
   onSectionChange,
-  userFiles = [] 
+  userFiles = [],
+  onDeleteFile
 }) => {
   const [activeView, setActiveView] = useState<string>("explorer");
   const [previousView, setPreviousView] = useState<string | null>(null);
   const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(true);
+  const [foldersOpen, setFoldersOpen] = useState<Record<string, boolean>>({
+    projectFiles: true,
+    userFiles: true
+  });
+
+  const toggleFolder = (folderId: string) => {
+    setFoldersOpen(prev => ({
+      ...prev,
+      [folderId]: !prev[folderId]
+    }));
+  };
 
   const activityBarItems = [
     { id: "explorer", icon: <FileCode size={24} />, label: "Explorer" },
@@ -97,6 +149,20 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
     { id: "debug", icon: <Bug size={24} />, label: "Run and Debug" },
     { id: "extensions", icon: <Package size={24} />, label: "Extensions" },
   ];
+
+  const handleActivityItemClick = (id: string) => {
+    if (id === activeView) {
+      setPreviousView(activeView);
+      setSidebarExpanded(!sidebarExpanded);
+    } else {
+      setSidebarExpanded(true);
+      setActiveView(id);
+    }
+  };
+
+  const toggleSidebar = () => {
+    setSidebarExpanded(!sidebarExpanded);
+  };
 
   const sidebarItems = {
     explorer: [
@@ -125,25 +191,8 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
     ],
   };
 
-  const handleActivityItemClick = (id: string) => {
-    // If clicking the same item that's already active, toggle sidebar expansion
-    if (id === activeView) {
-      setPreviousView(activeView);
-      setSidebarExpanded(!sidebarExpanded);
-    } else {
-      // When changing views, ensure sidebar is expanded
-      setSidebarExpanded(true);
-      setActiveView(id);
-    }
-  };
-
-  const toggleSidebar = () => {
-    setSidebarExpanded(!sidebarExpanded);
-  };
-
   return (
     <div className="flex h-full">
-      {/* Activity Bar */}
       <div className="w-12 flex flex-col bg-vscode-activitybar-dark dark:bg-vscode-activitybar-dark">
         {activityBarItems.map((item) => (
           <ActivityBarItem
@@ -156,7 +205,6 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
         ))}
       </div>
 
-      {/* Sidebar */}
       <div 
         className={cn(
           "bg-[#f3f3f3] dark:bg-vscode-dark-sidebar border-r border-border overflow-y-auto transition-all duration-300 ease-in-out",
@@ -169,7 +217,7 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
               <div className="flex items-center">
                 {activeView === "explorer" ? (
                   <>
-                    <span className="mr-2">HACKATHON-2025</span>
+                    <span className="mr-2">HACKATHON-2024</span>
                     <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                       <path fillRule="evenodd" clipRule="evenodd" d="M14 4.52v-.41l-2.02-.63L10.54 2 9.71 3.5l-2.02.63.31 1.65-.58.53-1.5-.39L4.6 7.15l.9 1.31-.21.98L4 10.08l.56 1.56 1.34-.26.67.85-.24 1.33 1.68.24 1.2-.95.92.47 1.05-1.29.49.12.73 1.36.89-1.3 1.13-.18.3-1.41-.61-.74 1.05-1.01-.43-1.25-.96-.25.02-.76 1.48-.36L14 4.52zM9.64 8.35l-.84.79-.84-.79.84-.79.84.79z" />
                     </svg>
@@ -187,7 +235,6 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
               </button>
             </div>
             
-            {/* Built-in section items */}
             <div className="mt-2">
               {sidebarItems[activeView as keyof typeof sidebarItems]?.map((item) => (
                 <SidebarItem
@@ -200,28 +247,73 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
               ))}
             </div>
             
-            {/* User-created files section */}
-            {activeView === "explorer" && userFiles.length > 0 && (
-              <div className="mt-4">
-                <div className="text-xs uppercase px-4 py-1 text-muted-foreground">
-                  USER FILES
-                </div>
-                {userFiles.map((file) => (
-                  <SidebarItem
-                    key={file.id}
-                    icon={<File size={16} className="text-orange-400" />}
-                    label={file.title}
-                    active={activeSection === file.id}
-                    onClick={() => onSectionChange(file.id)}
-                  />
-                ))}
+            {activeView === "explorer" && (
+              <div className="mt-2">
+                <SidebarItem
+                  icon={foldersOpen.projectFiles ? <FolderOpen size={16} className="text-yellow-400" /> : <Folder size={16} className="text-yellow-400" />}
+                  label="Project Files"
+                  active={false}
+                  onClick={() => {}}
+                  isFolder={true}
+                  isOpen={foldersOpen.projectFiles}
+                  onToggle={() => toggleFolder('projectFiles')}
+                />
+                
+                {foldersOpen.projectFiles && (
+                  <div className="ml-2">
+                    {sidebarItems.explorer.map((item) => (
+                      <SidebarItem
+                        key={item.id}
+                        icon={item.icon}
+                        label={item.label}
+                        active={activeSection === item.id}
+                        onClick={() => onSectionChange(item.id)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {activeView === "explorer" && (
+              <div className="mt-2">
+                <SidebarItem
+                  icon={foldersOpen.userFiles ? <FolderOpen size={16} className="text-yellow-400" /> : <Folder size={16} className="text-yellow-400" />}
+                  label="User Files"
+                  active={false}
+                  onClick={() => {}}
+                  isFolder={true}
+                  isOpen={foldersOpen.userFiles}
+                  onToggle={() => toggleFolder('userFiles')}
+                />
+                
+                {foldersOpen.userFiles && userFiles.length > 0 && (
+                  <div className="ml-2">
+                    {userFiles.map((file) => (
+                      <SidebarItem
+                        key={file.id}
+                        icon={<File size={16} className="text-orange-400" />}
+                        label={file.title}
+                        active={activeSection === file.id}
+                        onClick={() => onSectionChange(file.id)}
+                        onDelete={() => onDeleteFile && onDeleteFile(file.id)}
+                        showDeleteButton={true}
+                      />
+                    ))}
+                  </div>
+                )}
+                
+                {foldersOpen.userFiles && userFiles.length === 0 && (
+                  <div className="px-6 py-2 text-xs text-muted-foreground italic">
+                    No user files yet
+                  </div>
+                )}
               </div>
             )}
           </div>
         )}
       </div>
       
-      {/* Toggle button for collapsed sidebar */}
       {!sidebarExpanded && (
         <button 
           onClick={toggleSidebar}

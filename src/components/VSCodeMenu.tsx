@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/menubar';
 import ThemeToggle from './ThemeToggle';
 import SearchBar from './SearchBar';
+import AIChatbot from './AIChatbot';
 
 interface VSCodeMenuProps {
   onAction: (action: string) => void;
@@ -134,8 +135,9 @@ const VSCodeMenu: React.FC<VSCodeMenuProps> = ({ onAction, onSectionChange }) =>
         </MenubarMenu>
       </Menubar>
       
-      <div className="flex-1 flex justify-center">
+      <div className="flex-1 flex justify-center gap-2 items-center">
         <SearchBar onSectionChange={onSectionChange} />
+        <AIChatbot />
       </div>
       
       <div className="flex items-center mr-2">

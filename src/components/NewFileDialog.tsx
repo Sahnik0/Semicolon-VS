@@ -10,7 +10,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { 
+  RadioGroup, 
+  RadioGroupItem 
+} from '@/components/ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface NewFileDialogProps {
   isOpen: boolean;
@@ -21,12 +31,30 @@ interface NewFileDialogProps {
 const NewFileDialog: React.FC<NewFileDialogProps> = ({ isOpen, onClose, onCreateFile }) => {
   const [fileName, setFileName] = useState('');
   const [fileType, setFileType] = useState('component');
+  const [customExtension, setCustomExtension] = useState('');
+  const [selectedOption, setSelectedOption] = useState('preset');
+
+  const presetExtensions = {
+    component: '.tsx',
+    utility: '.ts',
+    stylesheet: '.css',
+    json: '.json',
+    html: '.html',
+    markdown: '.md',
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (fileName.trim()) {
-      onCreateFile(fileName, fileType);
+      // Create file with either preset type or custom extension
+      const fileExtension = selectedOption === 'preset' 
+        ? fileType
+        : customExtension.startsWith('.') ? customExtension.substring(1) : customExtension;
+      
+      onCreateFile(fileName, fileExtension);
       setFileName('');
+      setCustomExtension('');
+      setSelectedOption('preset');
     }
   };
 
@@ -49,17 +77,44 @@ const NewFileDialog: React.FC<NewFileDialogProps> = ({ isOpen, onClose, onCreate
                 autoFocus
               />
             </div>
+            
             <div className="space-y-2">
               <Label>File Type</Label>
-              <RadioGroup value={fileType} onValueChange={setFileType} className="flex space-x-4">
+              <RadioGroup value={selectedOption} onValueChange={setSelectedOption} className="flex flex-col gap-2">
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="component" id="component" />
-                  <Label htmlFor="component" className="cursor-pointer">Component (.tsx)</Label>
+                  <RadioGroupItem value="preset" id="preset" />
+                  <Label htmlFor="preset" className="cursor-pointer">Preset File Type</Label>
                 </div>
+                
+                {selectedOption === 'preset' && (
+                  <Select value={fileType} onValueChange={setFileType}>
+                    <SelectTrigger className="ml-6 dark:bg-[#3c3c3c] dark:border-[#3c3c3c]">
+                      <SelectValue placeholder="Select file type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="component">React Component (.tsx)</SelectItem>
+                      <SelectItem value="utility">TypeScript Utility (.ts)</SelectItem>
+                      <SelectItem value="stylesheet">CSS Style (.css)</SelectItem>
+                      <SelectItem value="json">JSON (.json)</SelectItem>
+                      <SelectItem value="html">HTML (.html)</SelectItem>
+                      <SelectItem value="markdown">Markdown (.md)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+                
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="utility" id="utility" />
-                  <Label htmlFor="utility" className="cursor-pointer">Utility (.ts)</Label>
+                  <RadioGroupItem value="custom" id="custom" />
+                  <Label htmlFor="custom" className="cursor-pointer">Custom Extension</Label>
                 </div>
+                
+                {selectedOption === 'custom' && (
+                  <Input
+                    value={customExtension}
+                    onChange={(e) => setCustomExtension(e.target.value)}
+                    placeholder=".js, .py, etc."
+                    className="ml-6 dark:bg-[#3c3c3c] dark:border-[#3c3c3c]"
+                  />
+                )}
               </RadioGroup>
             </div>
           </div>
