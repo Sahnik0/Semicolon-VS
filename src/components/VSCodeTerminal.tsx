@@ -4,6 +4,8 @@ import { X, Minimize, Maximize, ChevronRight, TerminalSquare, GripHorizontal } f
 interface TerminalCommand {
   command: string;
   output: string;
+  loading?: boolean;
+  id: string;
 }
 
 interface VSCodeTerminalProps {
@@ -18,14 +20,45 @@ const VSCodeTerminal: React.FC<VSCodeTerminalProps> = ({ isOpen, setIsOpen }) =>
   const [history, setHistory] = useState<TerminalCommand[]>([
     { 
       command: "hackathon --info", 
-      output: "SemiColon - A 48-hour hackathon focused on innovative solutions." 
+      output: "SemiColon - A 48-hour hackathon focused on innovative solutions.",
+      id: "initial" 
     }
   ]);
   const [startDragging, setStartDragging] = useState(false);
   const [startY, setStartY] = useState(0);
+  const [loadingFrame, setLoadingFrame] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const terminalContainerRef = useRef<HTMLDivElement>(null);
+  const loadingRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Terminal spinner animation frames
+  const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+
+  useEffect(() => {
+    // Handle loading animation
+    const animateLoading = () => {
+      const hasLoadingCommand = history.some(cmd => cmd.loading);
+      
+      if (hasLoadingCommand) {
+        setLoadingFrame(prev => (prev + 1) % spinnerFrames.length);
+        loadingRef.current = setTimeout(animateLoading, 80);
+      } else if (loadingRef.current) {
+        clearTimeout(loadingRef.current);
+        loadingRef.current = null;
+      }
+    };
+
+    if (history.some(cmd => cmd.loading) && !loadingRef.current) {
+      animateLoading();
+    }
+
+    return () => {
+      if (loadingRef.current) {
+        clearTimeout(loadingRef.current);
+      }
+    };
+  }, [history, loadingFrame, spinnerFrames.length]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -85,16 +118,32 @@ const VSCodeTerminal: React.FC<VSCodeTerminalProps> = ({ isOpen, setIsOpen }) =>
     
     if (!input.trim()) return;
 
-    const newCommand = { command: input, output: getCommandOutput(input) };
+    const commandId = `cmd-${Date.now()}`;
     
-    setHistory((prev) => [...prev, newCommand]);
+    // Add command to history with loading state
+    setHistory((prev) => [
+      ...prev, 
+      { command: input, output: "", loading: true, id: commandId }
+    ]);
+    
     setInput("");
 
+    // Simulate command execution with random delay (300-1500ms)
+    const executionTime = Math.random() * 1200 + 300;
+    
     setTimeout(() => {
+      setHistory((prev) => 
+        prev.map(cmd => 
+          cmd.id === commandId 
+            ? { ...cmd, output: getCommandOutput(cmd.command), loading: false } 
+            : cmd
+        )
+      );
+      
       if (inputRef.current) {
         inputRef.current.focus();
       }
-    }, 0);
+    }, executionTime);
   };
 
   const getCommandOutput = (cmd: string): string => {
@@ -187,13 +236,18 @@ const VSCodeTerminal: React.FC<VSCodeTerminalProps> = ({ isOpen, setIsOpen }) =>
 
           {/* Terminal content */}
           <div ref={terminalRef} className="h-[calc(100%-30px)] p-2 overflow-y-auto text-white font-mono text-sm">
-            {history.map((entry, idx) => (
-              <div key={idx} className="mb-1">
+            {history.map((entry) => (
+              <div key={entry.id} className="mb-1">
                 <div className="flex items-start">
                   <span className="text-green-500 mr-2">$</span>
                   <span>{entry.command}</span>
                 </div>
-                {entry.output && (
+                {entry.loading ? (
+                  <div className="ml-4 flex items-center">
+                    <span className="text-cyan-400 mr-2">{spinnerFrames[loadingFrame]}</span>
+                    <span className="text-gray-400">Running...</span>
+                  </div>
+                ) : entry.output && (
                   <div className="ml-4 whitespace-pre-line text-gray-300">
                     {entry.output}
                   </div>
@@ -209,6 +263,8 @@ const VSCodeTerminal: React.FC<VSCodeTerminalProps> = ({ isOpen, setIsOpen }) =>
                 onChange={(e) => setInput(e.target.value)}
                 className="flex-1 bg-transparent outline-none terminal-text"
                 autoFocus
+                spellCheck="false"
+                autoComplete="off"
               />
             </form>
           </div>
