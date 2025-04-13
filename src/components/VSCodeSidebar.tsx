@@ -235,17 +235,20 @@ const VSCodeSidebar: React.FC<VSCodeSidebarProps> = ({
               </button>
             </div>
             
-            <div className="mt-2">
-              {sidebarItems[activeView as keyof typeof sidebarItems]?.map((item) => (
-                <SidebarItem
-                  key={item.id}
-                  icon={item.icon}
-                  label={item.label}
-                  active={activeSection === item.id}
-                  onClick={() => onSectionChange(item.id)}
-                />
-              ))}
-            </div>
+            {/* Only show non-explorer views directly in sidebar */}
+            {activeView !== "explorer" && (
+              <div className="mt-2">
+                {sidebarItems[activeView as keyof typeof sidebarItems]?.map((item) => (
+                  <SidebarItem
+                    key={item.id}
+                    icon={item.icon}
+                    label={item.label}
+                    active={activeSection === item.id}
+                    onClick={() => onSectionChange(item.id)}
+                  />
+                ))}
+              </div>
+            )}
             
             {activeView === "explorer" && (
               <div className="mt-2">
