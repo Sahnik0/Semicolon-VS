@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Code, X } from "lucide-react";
 
@@ -44,7 +43,7 @@ const VSCodeTabs: React.FC<VSCodeTabsProps> = ({
   onCloseTab,
 }) => {
   return (
-    <div className="flex overflow-x-auto bg-secondary dark:bg-vscode-dark-sidebar">
+    <div className="flex overflow-x-auto bg-secondary dark:bg-secondary text-foreground">
       {tabs.map((tab) => (
         <VSCodeTab
           key={tab.id}

@@ -192,12 +192,25 @@
   color-scheme: light dark;
 }
 
+/* VS Code UI component style overrides */
 .bg-vscode-activitybar-dark {
   background-color: hsl(var(--vscode-activitybar-dark));
+  color: hsl(var(--foreground));
+}
+
+.dark .bg-vscode-activitybar-dark,
+[data-using-extension-theme="true"].dark .bg-vscode-activitybar-dark {
+  color: hsl(var(--foreground));
 }
 
 .bg-vscode-dark-sidebar {
   background-color: hsl(var(--vscode-dark-sidebar));
+  color: hsl(var(--foreground));
+}
+
+.dark .bg-vscode-dark-sidebar,
+[data-using-extension-theme="true"].dark .bg-vscode-dark-sidebar {
+  color: hsl(var(--foreground));
 }
 
 .bg-vscode-terminal {
@@ -206,6 +219,33 @@
 
 .bg-vscode-statusbar {
   background-color: hsl(var(--vscode-statusbar));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Theme-specific overrides for tabs and menu items */
+[data-using-extension-theme="true"] .vscode-tab {
+  color: hsl(var(--foreground));
+}
+
+[data-using-extension-theme="true"] .vscode-tab.active {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-color: hsl(var(--primary));
+}
+
+[data-using-extension-theme="true"] .vscode-context-menu-item {
+  color: hsl(var(--foreground));
+}
+
+[data-using-extension-theme="true"] .sidebar-item {
+  color: hsl(var(--foreground));
+}
+
+/* Explicitly handle dark mode text colors for VS Code UI components */
+.dark .vscode-tab,
+.dark .sidebar-item,
+.dark .activity-item {
+  color: hsl(var(--foreground));
 }
 
 /* Mobile optimizations */

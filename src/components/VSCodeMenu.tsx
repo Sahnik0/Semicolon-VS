@@ -18,7 +18,7 @@ interface VSCodeMenuProps {
 
 const VSCodeMenu: React.FC<VSCodeMenuProps> = ({ onAction, onSectionChange }) => {
   return (
-    <div className="h-9 bg-background dark:bg-[#1e1e1e] border-b border-border dark:border-[#333] flex items-center px-2 text-sm">
+    <div className="h-9 bg-background border-b border-border flex items-center px-2 text-sm text-foreground">
       <Menubar className="border-none bg-transparent p-0 h-auto">
         <MenubarMenu>
           <MenubarTrigger className="px-2 py-1 hover:bg-accent/50 data-[state=open]:bg-accent/50">File</MenubarTrigger>

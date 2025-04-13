@@ -1,19 +1,19 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar, Code, Users, Award, ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const CodeBlock: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="w-full rounded-md overflow-hidden mb-6 shadow-lg">
-      <div className="bg-[#1e1e1e] px-4 py-2 text-sm font-medium flex items-center justify-between border-b border-[#333]">
-        <span className="text-xs text-[#cccccc]">hackathon.js</span>
+      <div className="dark:bg-zinc-900 bg-zinc-100 px-4 py-2 text-sm font-medium flex items-center justify-between border-b border-border">
+        <span className="text-xs text-foreground/70">semicolon.js</span>
         <div className="flex space-x-2">
-          <span className="text-xs text-[#cccccc]">JavaScript</span>
+          <span className="text-xs text-foreground/70">Authority</span>
         </div>
       </div>
-      <pre className="bg-[#1e1e1e] p-4 overflow-x-auto">
-        <code className="text-[#cccccc] text-sm">{children}</code>
+      <pre className="dark:bg-zinc-900 bg-zinc-100 p-4 overflow-x-auto">
+        <code className="text-foreground text-sm">{children}</code>
       </pre>
     </div>
   );
@@ -23,37 +23,37 @@ const HomeSection: React.FC = () => {
   return (
     <div className="p-4 min-h-screen animate-fade-in">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-2 text-center">SemiColon 2025</h1>
+        <h1 className="text-4xl font-bold mb-2 text-center text-foreground">SemiColon 2025</h1>
         <p className="text-xl text-center mb-8 text-muted-foreground">
-          48-Hour Global Hackathon | May 20-22, 2025
+          48-Hour Global Hackathon | Aug 20-22, 2025
         </p>
         
         <div className="mb-12">
           <CodeBlock>
-            <span className="text-[#569cd6]">const</span> <span className="text-[#4ec9b0]">hackathon</span> <span className="text-[#cccccc]">=</span> <span className="text-[#569cd6]">new</span> <span className="text-[#4ec9b0]">Hackathon</span><span className="text-[#cccccc]">(</span><span className="text-[#ce9178]">"SemiColon 2025"</span><span className="text-[#cccccc]">);</span>
+            <span className={cn("text-blue-600 dark:text-blue-400")}>const</span> <span className={cn("text-emerald-600 dark:text-emerald-400")}>hackathon</span> <span className="text-foreground">=</span> <span className={cn("text-blue-600 dark:text-blue-400")}>new</span> <span className={cn("text-emerald-600 dark:text-emerald-400")}>Hackathon</span><span className="text-foreground">(</span><span className={cn("text-amber-600 dark:text-amber-300")}>"SemiColon 2025"</span><span className="text-foreground">);</span>
             
-            <span className="block mt-4 text-[#6a9955]">// $20,000+ in Prizes</span>
-            <span className="text-[#4ec9b0]">hackathon</span><span className="text-[#cccccc]">.</span><span className="text-[#dcdcaa]">addPrizes</span><span className="text-[#cccccc]">{"({"}</span>
-            <span className="block pl-8 text-[#cccccc]">cashAwards: </span><span className="text-[#b5cea8]">true</span><span className="text-[#cccccc]">,</span>
-            <span className="block pl-8 text-[#cccccc]">techGadgets: </span><span className="text-[#b5cea8]">true</span><span className="text-[#cccccc]">,</span>
-            <span className="block pl-8 text-[#cccccc]">internshipOpportunities: </span><span className="text-[#b5cea8]">true</span><span className="text-[#cccccc]">,</span>
-            <span className="block pl-8 text-[#cccccc]">totalValue: </span><span className="text-[#ce9178]">"$20,000+"</span>
-            <span className="block text-[#cccccc]">{"})"}</span>
+            <span className={cn("block mt-4 text-green-600 dark:text-green-400")}>// $20,000+ in Prizes</span>
+            <span className={cn("text-emerald-600 dark:text-emerald-400")}>hackathon</span><span className="text-foreground">.</span><span className={cn("text-yellow-600 dark:text-yellow-300")}>addPrizes</span><span className="text-foreground">{"({"}</span>
+            <span className={cn("block pl-8 text-foreground")}>cashAwards: </span><span className={cn("text-blue-600 dark:text-blue-300")}>true</span><span className="text-foreground">,</span>
+            <span className={cn("block pl-8 text-foreground")}>techGadgets: </span><span className={cn("text-blue-600 dark:text-blue-300")}>true</span><span className="text-foreground">,</span>
+            <span className={cn("block pl-8 text-foreground")}>internshipOpportunities: </span><span className={cn("text-blue-600 dark:text-blue-300")}>true</span><span className="text-foreground">,</span>
+            <span className={cn("block pl-8 text-foreground")}>totalValue: </span><span className={cn("text-amber-600 dark:text-amber-300")}>"$20,000+"</span>
+            <span className={cn("block text-foreground")}>{"})"}</span>
             
-            <span className="block mt-4 text-[#6a9955]">// 5 Exciting Tracks</span>
-            <span className="text-[#4ec9b0]">hackathon</span><span className="text-[#cccccc]">.</span><span className="text-[#dcdcaa]">setTracks</span><span className="text-[#cccccc]">{"(["}</span>
-            <span className="block pl-8 text-[#ce9178]">"Web/Mobile Development"</span><span className="text-[#cccccc]">,</span>
-            <span className="block pl-8 text-[#ce9178]">"AI/Machine Learning"</span><span className="text-[#cccccc]">,</span>
-            <span className="block pl-8 text-[#ce9178]">"Blockchain"</span><span className="text-[#cccccc]">,</span>
-            <span className="block pl-8 text-[#ce9178]">"AR/VR"</span><span className="text-[#cccccc]">,</span>
-            <span className="block pl-8 text-[#ce9178]">"Open Innovation"</span>
-            <span className="block text-[#cccccc]">{"])"}</span>
+            <span className={cn("block mt-4 text-green-600 dark:text-green-400")}>// 5 Exciting Tracks</span>
+            <span className={cn("text-emerald-600 dark:text-emerald-400")}>hackathon</span><span className="text-foreground">.</span><span className={cn("text-yellow-600 dark:text-yellow-300")}>setTracks</span><span className="text-foreground">{"(["}</span>
+            <span className={cn("block pl-8 text-amber-600 dark:text-amber-300")}>"Web/Mobile Development"</span><span className="text-foreground">,</span>
+            <span className={cn("block pl-8 text-amber-600 dark:text-amber-300")}>"AI/Machine Learning"</span><span className="text-foreground">,</span>
+            <span className={cn("block pl-8 text-amber-600 dark:text-amber-300")}>"Blockchain"</span><span className="text-foreground">,</span>
+            <span className={cn("block pl-8 text-amber-600 dark:text-amber-300")}>"AR/VR"</span><span className="text-foreground">,</span>
+            <span className={cn("block pl-8 text-amber-600 dark:text-amber-300")}>"Open Innovation"</span>
+            <span className={cn("block text-foreground")}>{"])"}</span>
             
-            <span className="block mt-4 text-[#6a9955]">// Expert Mentorship</span>
-            <span className="text-[#4ec9b0]">hackathon</span><span className="text-[#cccccc]">.</span><span className="text-[#dcdcaa]">provideMentorship</span><span className="text-[#cccccc]">(</span><span className="text-[#b5cea8]">true</span><span className="text-[#cccccc]">);</span>
+            <span className={cn("block mt-4 text-green-600 dark:text-green-400")}>// Expert Mentorship</span>
+            <span className={cn("text-emerald-600 dark:text-emerald-400")}>hackathon</span><span className="text-foreground">.</span><span className={cn("text-yellow-600 dark:text-yellow-300")}>provideMentorship</span><span className="text-foreground">(</span><span className={cn("text-blue-600 dark:text-blue-300")}>true</span><span className="text-foreground">);</span>
             
-            <span className="block mt-4 text-[#6a9955]">// Register now to secure your spot!</span>
-            <span className="text-[#4ec9b0]">hackathon</span><span className="text-[#cccccc]">.</span><span className="text-[#dcdcaa]">start</span><span className="text-[#cccccc]">();</span>
+            <span className={cn("block mt-4 text-green-600 dark:text-green-400")}>// Register now to secure your spot!</span>
+            <span className={cn("text-emerald-600 dark:text-emerald-400")}>hackathon</span><span className="text-foreground">.</span><span className={cn("text-yellow-600 dark:text-yellow-300")}>start</span><span className="text-foreground">();</span>
           </CodeBlock>
         </div>
         

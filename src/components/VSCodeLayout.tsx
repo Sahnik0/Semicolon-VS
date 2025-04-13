@@ -225,9 +225,9 @@ const VSCodeLayout: React.FC<VSCodeLayoutProps> = ({
     // If it's a user-created file, render an editable area
     if (userFiles[activeTab]) {
       return (
-        <div className="flex-1 overflow-auto p-4 bg-background dark:bg-[#1e1e1e]">
+        <div className="flex-1 overflow-auto p-4 bg-background">
           <textarea
-            className="w-full h-full bg-transparent border-none focus:outline-none font-mono text-sm"
+            className="w-full h-full bg-transparent border-none focus:outline-none font-mono text-sm text-foreground"
             value={userFiles[activeTab]}
             onChange={(e) => handleFileContentChange(activeTab, e.target.value)}
             spellCheck={false}
@@ -238,7 +238,7 @@ const VSCodeLayout: React.FC<VSCodeLayoutProps> = ({
     
     // Otherwise render the normal content
     return (
-      <div className="flex-1 overflow-auto p-0 bg-background dark:bg-[#1e1e1e]">
+      <div className="flex-1 overflow-auto p-0 bg-background">
         {children}
       </div>
     );
@@ -246,7 +246,7 @@ const VSCodeLayout: React.FC<VSCodeLayoutProps> = ({
 
   return (
     <div 
-      className="flex flex-col h-screen overflow-hidden bg-white text-black dark:bg-[#1e1e1e] dark:text-[#cccccc]"
+      className="flex flex-col h-screen overflow-hidden bg-background text-foreground"
       onContextMenu={handleContextMenu}
     >
       {/* Top navigation bar (mimicking VS Code) */}

@@ -119,44 +119,56 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Clear light/dark classes
     root.classList.remove("light", "dark");
+
+    // Determine if theme is dark or light based on background color
+    const bgColor = themeColors["--background"] || "#ffffff";
+    const isDarkTheme = isColorDark(bgColor);
+
+    // Add the appropriate class based on theme brightness
+    if (isDarkTheme) {
+      root.classList.add("dark");
+    } else {
+      root.classList.add("light");
+    }
+
     root.setAttribute("data-using-extension-theme", "true");
 
     // Map extension theme colors to all necessary variables
     const mappedColors: Record<string, string> = {
-      "--custom-background": themeColors["--background"] || "#ffffff",
-      "--custom-foreground": themeColors["--foreground"] || "#333333",
+      "--custom-background": themeColors["--background"] || (isDarkTheme ? "#121212" : "#ffffff"),
+      "--custom-foreground": themeColors["--foreground"] || (isDarkTheme ? "#e0e0e0" : "#333333"),
       "--custom-primary": themeColors["--primary-color"] || "#007acc",
-      "--custom-vscode-dark-sidebar": themeColors["--vscode-sidebar-background"] || "#f5f5f5",
-      "--custom-vscode-terminal": themeColors["--vscode-terminal-background"] || "#f8f8f8",
-      "--custom-vscode-statusbar": themeColors["--vscode-statusBar-background"] || "#f5f5f5",
-      "--custom-vscode-activitybar-dark": themeColors["--vscode-sidebar-background"] || "#f5f5f5",
-      "--custom-editor-background": themeColors["--vscode-editor-background"] || "#ffffff",
-      "--custom-editor-foreground": themeColors["--vscode-editor-foreground"] || "#333333",
+      "--custom-vscode-dark-sidebar": themeColors["--vscode-sidebar-background"] || (isDarkTheme ? "#252526" : "#f5f5f5"),
+      "--custom-vscode-terminal": themeColors["--vscode-terminal-background"] || (isDarkTheme ? "#1e1e1e" : "#f8f8f8"),
+      "--custom-vscode-statusbar": themeColors["--vscode-statusBar-background"] || (isDarkTheme ? "#007acc" : "#007acc"),
+      "--custom-vscode-activitybar-dark": themeColors["--vscode-sidebar-background"] || (isDarkTheme ? "#333333" : "#f5f5f5"),
+      "--custom-editor-background": themeColors["--vscode-editor-background"] || (isDarkTheme ? "#1e1e1e" : "#ffffff"),
+      "--custom-editor-foreground": themeColors["--vscode-editor-foreground"] || (isDarkTheme ? "#d4d4d4" : "#333333"),
     };
 
     // Convert hex to HSL for Tailwind compatibility
     Object.keys(mappedColors).forEach((key) => {
-      if (mappedColors[key].startsWith("#")) {
+      if (mappedColors[key]?.startsWith("#")) {
         mappedColors[key] = hexToHSL(mappedColors[key]);
       }
     });
 
-    // Set additional Tailwind variables with reasonable defaults
+    // Ensure all Tailwind variables are mapped with better contrast awareness
     mappedColors["--custom-card"] = mappedColors["--custom-background"];
     mappedColors["--custom-card-foreground"] = mappedColors["--custom-foreground"];
     mappedColors["--custom-popover"] = mappedColors["--custom-background"];
     mappedColors["--custom-popover-foreground"] = mappedColors["--custom-foreground"];
-    mappedColors["--custom-primary-foreground"] = hexToHSL("#ffffff");
-    mappedColors["--custom-secondary"] = hexToHSL("#e5e7eb");
-    mappedColors["--custom-secondary-foreground"] = mappedColors["--custom-foreground"];
-    mappedColors["--custom-muted"] = hexToHSL("#e5e7eb");
-    mappedColors["--custom-muted-foreground"] = hexToHSL("#6b7280");
-    mappedColors["--custom-accent"] = hexToHSL("#d1d5db");
-    mappedColors["--custom-accent-foreground"] = mappedColors["--custom-foreground"];
-    mappedColors["--custom-destructive"] = hexToHSL("#ef4444");
+    mappedColors["--custom-primary-foreground"] = isDarkTheme ? hexToHSL("#ffffff") : hexToHSL("#ffffff");
+    mappedColors["--custom-secondary"] = isDarkTheme ? hexToHSL("#2d2d2d") : hexToHSL("#f3f3f3");
+    mappedColors["--custom-secondary-foreground"] = isDarkTheme ? hexToHSL("#e0e0e0") : hexToHSL("#333333");
+    mappedColors["--custom-muted"] = isDarkTheme ? hexToHSL("#383838") : hexToHSL("#f3f3f3");
+    mappedColors["--custom-muted-foreground"] = isDarkTheme ? hexToHSL("#a0a0a0") : hexToHSL("#6b7280");
+    mappedColors["--custom-accent"] = isDarkTheme ? hexToHSL("#2d2d2d") : hexToHSL("#f3f3f3");
+    mappedColors["--custom-accent-foreground"] = isDarkTheme ? hexToHSL("#e0e0e0") : hexToHSL("#333333");
+    mappedColors["--custom-destructive"] = hexToHSL(isDarkTheme ? "#a53030" : "#ef4444");
     mappedColors["--custom-destructive-foreground"] = hexToHSL("#ffffff");
-    mappedColors["--custom-border"] = hexToHSL("#d1d5db");
-    mappedColors["--custom-input"] = hexToHSL("#d1d5db");
+    mappedColors["--custom-border"] = isDarkTheme ? hexToHSL("#3a3a3a") : hexToHSL("#d1d5db");
+    mappedColors["--custom-input"] = isDarkTheme ? hexToHSL("#3a3a3a") : hexToHSL("#d1d5db");
     mappedColors["--custom-ring"] = mappedColors["--custom-primary"];
 
     // Apply all mapped colors
@@ -166,8 +178,33 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     if (typeof window !== "undefined") {
       localStorage.setItem(EXTENSION_THEME_KEY, JSON.stringify(themeColors));
-      localStorage.setItem(THEME_STORAGE_KEY, theme);
+      localStorage.setItem(THEME_STORAGE_KEY, isDarkTheme ? "dark" : "light");
     }
+  };
+
+  // Helper function to determine if a color is dark
+  const isColorDark = (hexColor: string): boolean => {
+    // Remove # if present
+    hexColor = hexColor.replace('#', '');
+    
+    // Convert to RGB
+    let r = 0, g = 0, b = 0;
+    if (hexColor.length === 3) {
+      r = parseInt(hexColor[0] + hexColor[0], 16);
+      g = parseInt(hexColor[1] + hexColor[1], 16);
+      b = parseInt(hexColor[2] + hexColor[2], 16);
+    } else if (hexColor.length >= 6) {
+      r = parseInt(hexColor.substring(0, 2), 16);
+      g = parseInt(hexColor.substring(2, 4), 16);
+      b = parseInt(hexColor.substring(4, 6), 16);
+    }
+    
+    // Calculate relative luminance (perception-based brightness)
+    // Using the formula from WCAG 2.0
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    
+    // If luminance is less than 0.5, consider it dark
+    return luminance < 0.5;
   };
 
   const resetTheme = () => {
