@@ -25,17 +25,8 @@ const VSCodeFooter: React.FC<VSCodeFooterProps> = ({ onToggleTerminal }) => {
             <Terminal className="h-3.5 w-3.5 mr-1" />
             <span>Add Logs</span>
           </button>
-          
-          <button className="flex items-center hover:bg-black/10 px-1 py-0.5 rounded" aria-label="CyberCoder">
-            <Circle className="h-3.5 w-3.5 mr-1" />
-            <span>CyberCoder</span>
-          </button>
-          
-          <button className="flex items-center hover:bg-black/10 px-1 py-0.5 rounded" aria-label="Improve Code">
-            <Code className="h-3.5 w-3.5 mr-1" />
-            <span>Improve Code</span>
-          </button>
-          
+
+                  
           <button className="flex items-center hover:bg-black/10 px-1 py-0.5 rounded" aria-label="Share Code Link">
             <Share2 className="h-3.5 w-3.5 mr-1" />
             <span>Share Code Link</span>
