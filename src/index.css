@@ -1,0 +1,192 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme variables */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 93%;
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 0 0% 93%;
+    --muted-foreground: 0 0% 50%;
+
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 20%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 210 100% 50%;
+
+    --radius: 0.25rem;
+
+    --vscode-activitybar-dark: 0 0% 95%;
+    --vscode-dark-sidebar: 0 0% 95%;
+    --vscode-terminal: 0 0% 98%;
+    --vscode-statusbar: 0 0% 93%;
+  }
+
+  .dark {
+    /* Dark theme variables */
+    --background: 0 0% 12%;
+    --foreground: 0 0% 80%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 80%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 80%;
+
+    --primary: 210 100% 40%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 80%;
+
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 80%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 210 100% 40%;
+    
+    --vscode-activitybar-dark: 0 0% 15%;
+    --vscode-dark-sidebar: 0 0% 18%;
+    --vscode-terminal: 0 0% 12%;
+    --vscode-statusbar: 0 0% 15%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono transition-colors duration-200;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-500/30 rounded-full hover:bg-gray-500/50;
+  }
+}
+
+@layer components {
+  .vscode-tab {
+    @apply px-4 py-2 flex items-center gap-2 border-t-2 border-transparent hover:bg-[#e6e6e6] dark:hover:bg-[#2a2d2e] transition-colors;
+  }
+
+  .vscode-tab.active {
+    @apply border-t-2 border-[#0078d4] bg-white dark:bg-[#1e1e1e];
+  }
+
+  .vscode-context-menu {
+    @apply absolute bg-white dark:bg-[#252526] border border-[#e0e0e0] dark:border-[#3c3c3c] rounded-md shadow-md py-1 z-50 min-w-[180px];
+  }
+
+  .vscode-context-menu-item {
+    @apply px-3 py-1.5 text-sm flex items-center gap-2 hover:bg-[#0060c0] dark:hover:bg-[#04395e] hover:text-white cursor-pointer text-[#333] dark:text-[#cccccc];
+  }
+
+  .vscode-context-menu-separator {
+    @apply border-t border-[#e0e0e0] dark:border-[#3c3c3c] my-1;
+  }
+
+  .terminal-text {
+    @apply font-mono text-black dark:text-[#cccccc];
+  }
+
+  .cursor {
+    @apply inline-block w-2 h-4 bg-[#0078d4] animate-cursor-blink;
+  }
+  
+  .gallery-image {
+    @apply rounded-md overflow-hidden border border-[#e0e0e0] dark:border-[#3c3c3c] hover:border-[#0078d4] transition-colors;
+  }
+  
+  .gallery-overlay {
+    @apply absolute inset-0 flex items-center justify-center bg-black/70 opacity-0 hover:opacity-100 transition-opacity;
+  }
+  
+  .gallery-title {
+    @apply text-white text-sm font-medium;
+  }
+
+  /* Responsive utilities */
+  .responsive-container {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .responsive-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+  
+  .responsive-flex {
+    @apply flex flex-col sm:flex-row;
+  }
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+.bg-vscode-activitybar-dark {
+  background-color: hsl(var(--vscode-activitybar-dark));
+}
+
+.bg-vscode-dark-sidebar {
+  background-color: hsl(var(--vscode-dark-sidebar));
+}
+
+.bg-vscode-terminal {
+  background-color: hsl(var(--vscode-terminal));
+}
+
+.bg-vscode-statusbar {
+  background-color: hsl(var(--vscode-statusbar));
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .menubar-label {
+    @apply hidden;
+  }
+  
+  .vscode-tab {
+    @apply px-2 py-1 text-xs;
+  }
+  
+  .vscode-footer-item {
+    @apply text-xs;
+  }
+}
