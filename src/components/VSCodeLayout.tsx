@@ -5,7 +5,6 @@ import VSCodeStatusBar from "./VSCodeStatusBar";
 import VSCodeTerminal from "./VSCodeTerminal";
 import VSCodeFooter from "./VSCodeFooter";
 import { VSCodeContextMenu, useContextMenu } from "./VSCodeContextMenu";
-import { ThemeProvider } from "../hooks/useTheme";
 import NewFileDialog from "./NewFileDialog";
 import VSCodeMenu from "./VSCodeMenu";
 import { toast } from "@/hooks/use-toast";
@@ -27,21 +26,42 @@ const VSCodeLayout: React.FC<VSCodeLayoutProps> = ({
   const [userFiles, setUserFiles] = useState<{[key: string]: string}>({});
   
   const [tabs, setTabs] = useState([
-    { id: activeSection, title: `${activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}.tsx` },
+    { id: activeSection, title: formatTabTitle(activeSection) },
   ]);
   
   const [activeTab, setActiveTab] = useState(activeSection);
+
+  // Format tab title based on section ID
+  function formatTabTitle(sectionId: string): string {
+    // Special handling for extension sections
+    if (sectionId === "marketplace") {
+      return "Extension Marketplace";
+    } else if (sectionId === "installed") {
+      return "Installed Extensions";
+    } else if (sectionId === "search-results") {
+      return "Search Results";
+    } else if (sectionId === "debug-console") {
+      return "Debug Console";
+    } else if (sectionId === "changes") {
+      return "Source Control: Changes";
+    } else if (sectionId === "commits") {
+      return "Source Control: Commits";
+    } else {
+      // Default format for regular sections
+      return `${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}.tsx`;
+    }
+  }
 
   useEffect(() => {
     // Update tabs when section changes
     if (!tabs.some(tab => tab.id === activeSection)) {
       setTabs(prev => [
         ...prev,
-        { id: activeSection, title: `${activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}.tsx` }
+        { id: activeSection, title: formatTabTitle(activeSection) }
       ]);
     }
     setActiveTab(activeSection);
-  }, [activeSection, tabs]);
+  }, [activeSection]);
 
   const handleTabSelect = (tabId: string) => {
     setActiveTab(tabId);
@@ -110,6 +130,17 @@ const VSCodeLayout: React.FC<VSCodeLayoutProps> = ({
       case 'run':
       case 'runWithoutDebugging':
         setShowTerminal(true);
+        break;
+      case 'explorer':
+        // Handle navigation to Explorer view
+        break;
+      case 'search':
+        // Handle navigation to Search view
+        onSectionChange('search-results');
+        break;
+      case 'extensions':
+        // Go to installed extensions
+        onSectionChange('installed');
         break;
       default:
         // Handle dynamic navigation to sections
@@ -214,58 +245,56 @@ const VSCodeLayout: React.FC<VSCodeLayoutProps> = ({
   };
 
   return (
-    <ThemeProvider>
-      <div 
-        className="flex flex-col h-screen overflow-hidden bg-white text-black dark:bg-[#1e1e1e] dark:text-[#cccccc]"
-        onContextMenu={handleContextMenu}
-      >
-        {/* Top navigation bar (mimicking VS Code) */}
-        <VSCodeMenu 
-          onAction={handleMenuAction}
+    <div 
+      className="flex flex-col h-screen overflow-hidden bg-white text-black dark:bg-[#1e1e1e] dark:text-[#cccccc]"
+      onContextMenu={handleContextMenu}
+    >
+      {/* Top navigation bar (mimicking VS Code) */}
+      <VSCodeMenu 
+        onAction={handleMenuAction}
+        onSectionChange={onSectionChange}
+      />
+      
+      <div className="flex flex-1 overflow-hidden">
+        <VSCodeSidebar 
+          activeSection={activeSection} 
           onSectionChange={onSectionChange}
+          userFiles={Object.keys(userFiles).map(id => ({ 
+            id, 
+            title: tabs.find(tab => tab.id === id)?.title || id 
+          }))}
+          onDeleteFile={handleDeleteFile}
         />
         
-        <div className="flex flex-1 overflow-hidden">
-          <VSCodeSidebar 
-            activeSection={activeSection} 
-            onSectionChange={onSectionChange}
-            userFiles={Object.keys(userFiles).map(id => ({ 
-              id, 
-              title: tabs.find(tab => tab.id === id)?.title || id 
-            }))}
-            onDeleteFile={handleDeleteFile}
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <VSCodeTabs 
+            tabs={tabs}
+            activeTab={activeTab}
+            onSelectTab={handleTabSelect}
+            onCloseTab={handleTabClose}
           />
           
-          <div className="flex flex-col flex-1 overflow-hidden">
-            <VSCodeTabs 
-              tabs={tabs}
-              activeTab={activeTab}
-              onSelectTab={handleTabSelect}
-              onCloseTab={handleTabClose}
-            />
-            
-            {renderContent()}
-          </div>
+          {renderContent()}
         </div>
-        
-        <VSCodeFooter onToggleTerminal={handleTerminalToggle} />
-        
-        <VSCodeTerminal isOpen={showTerminal} setIsOpen={setShowTerminal} />
-        
-        {contextMenu.show && (
-          <VSCodeContextMenu
-            position={contextMenu.position}
-            onClose={closeContextMenu}
-          />
-        )}
-
-        <NewFileDialog 
-          isOpen={isNewFileDialogOpen} 
-          onClose={() => setIsNewFileDialogOpen(false)} 
-          onCreateFile={handleCreateNewFile}
-        />
       </div>
-    </ThemeProvider>
+      
+      <VSCodeFooter onToggleTerminal={handleTerminalToggle} />
+      
+      <VSCodeTerminal isOpen={showTerminal} setIsOpen={setShowTerminal} />
+      
+      {contextMenu.show && (
+        <VSCodeContextMenu
+          position={contextMenu.position}
+          onClose={closeContextMenu}
+        />
+      )}
+
+      <NewFileDialog 
+        isOpen={isNewFileDialogOpen} 
+        onClose={() => setIsNewFileDialogOpen(false)} 
+        onCreateFile={handleCreateNewFile}
+      />
+    </div>
   );
 };
 

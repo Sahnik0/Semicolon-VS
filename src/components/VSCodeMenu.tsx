@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Menubar, 
@@ -9,7 +8,6 @@ import {
   MenubarSeparator, 
   MenubarShortcut 
 } from '@/components/ui/menubar';
-import ThemeToggle from './ThemeToggle';
 import SearchBar from './SearchBar';
 import AIChatbot from './AIChatbot';
 
@@ -131,6 +129,9 @@ const VSCodeMenu: React.FC<VSCodeMenuProps> = ({ onAction, onSectionChange }) =>
             <MenubarItem onClick={() => onAction('about')}>
               About 
             </MenubarItem>
+            <MenubarItem onClick={() => onAction('extensions')}>
+              Get Themes & Extensions
+            </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
@@ -138,10 +139,6 @@ const VSCodeMenu: React.FC<VSCodeMenuProps> = ({ onAction, onSectionChange }) =>
       <div className="flex-1 flex justify-center gap-2 items-center">
         <SearchBar onSectionChange={onSectionChange} />
         <AIChatbot />
-      </div>
-      
-      <div className="flex items-center mr-2">
-        <ThemeToggle />
       </div>
     </div>
   );
